@@ -51,11 +51,11 @@ npm install ngx-image-magnifier
 Import the directive and apply it to any image:
 
 ```typescript
-import { Component } from '@angular/core';
-import { ImageMagnifierDirective } from 'ngx-image-magnifier';
+import { Component } from "@angular/core";
+import { ImageMagnifierDirective } from "ngx-image-magnifier";
 
 @Component({
-  selector: 'app-gallery',
+  selector: "app-gallery",
   standalone: true,
   imports: [ImageMagnifierDirective],
   template: ` <img appImageMagnifier src="photo.jpg" alt="Gallery image" /> `,
@@ -130,7 +130,13 @@ Mobile users can view the magnifier without holding the modifier.
 ### Rounded Magnifier
 
 ```html
-<img appImageMagnifier src="profile.jpg" alt="Profile" [magnifierSize]="300" [rounded]="true" />
+<img
+  appImageMagnifier
+  src="profile.jpg"
+  alt="Profile"
+  [magnifierSize]="300"
+  [rounded]="true"
+/>
 ```
 
 ### Custom Positioning
@@ -215,6 +221,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 MIT License - see LICENSE file for details
 
 ## Changelog
+
+### 2.0.2 (February 05, 2026)
+
+**Changed**
+
+- Updated GitHyb repository URL in package.json to the correct link.
+- Updated homepage URL in package.json to the correct link.
 
 ### 2.0.1 (January 28, 2026)
 

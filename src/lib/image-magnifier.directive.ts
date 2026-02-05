@@ -242,8 +242,20 @@ export class ImageMagnifierDirective implements OnInit, OnDestroy {
         const bgWidth = img.naturalWidth * this.zoom;
         const bgHeight = img.naturalHeight * this.zoom;
 
-        const bgX = -(bgWidth * (focus.x / 100) - duplicateWidth / 2);
-        const bgY = -(bgHeight * (focus.y / 100) - duplicateHeight / 2);
+        // Calculate ideal background position centered on focus point
+        let bgX = -(bgWidth * (focus.x / 100) - duplicateWidth / 2);
+        let bgY = -(bgHeight * (focus.y / 100) - duplicateHeight / 2);
+
+        // Clamp background position to stay within image boundaries
+        // Min: right edge of image at right edge of magnifier
+        // Max: left edge of image at left edge of magnifier
+        const minBgX = -(bgWidth - duplicateWidth);
+        const maxBgX = 0;
+        bgX = Math.max(minBgX, Math.min(maxBgX, bgX));
+
+        const minBgY = -(bgHeight - duplicateHeight);
+        const maxBgY = 0;
+        bgY = Math.max(minBgY, Math.min(maxBgY, bgY));
 
         this.duplicate.style.backgroundPosition = `${bgX}px ${bgY}px`;
     }

@@ -265,6 +265,21 @@ MIT License - see LICENSE file for details
 
 ## Changelog
 
+### 2.0.8-12 (February 05, 2026)
+
+### Fixed
+
+- Aligned package entry points/exports to the actual ng-packagr output paths so module resolution works correctly.. again.
+
+### 2.0.7 (February 05, 2026)
+
+### Fixed
+
+- Improved zoom focus behavior to clamp background position within image boundaries
+  - Prevents blank areas from showing when zoomed in with any focus mode (cursor, custom coordinates, or predefined positions)
+  - Ensures focus point aligns as closely as possible to requested position without exceeding image edges
+  - High zoom values now properly display corresponding image areas while keeping everything in bounds
+
 ### 2.0.6 (February 05, 2026)
 
 ### Fixed

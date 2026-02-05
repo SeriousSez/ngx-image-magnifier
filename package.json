@@ -1,6 +1,6 @@
 {
   "name": "@sezsahin/ngx-image-magnifier",
-  "version": "2.0.6",
+  "version": "2.0.12",
   "description": "A highly performant, customizable Angular image magnifier directive with keyboard modifier support, smart positioning, mobile optimization, and smooth GPU-accelerated animations.",
   "author": "sezsahin",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "gpu-accelerated"
   ],
   "scripts": {
-    "build": "ng-packagr -p ng-package.json",
+    "build": "ng-packagr -p ng-package.json && node fix-dist-paths.js",
     "build:watch": "ng-packagr -p ng-package.json --watch",
     "test": "ng test"
   },
@@ -47,9 +47,10 @@
   "exports": {
     ".": {
       "types": "./dist/types/sezsahin-ngx-image-magnifier.d.ts",
-      "esm2022": "./dist/fesm2022/sezsahin-ngx-image-magnifier.mjs",
-      "es2022": "./dist/fesm2022/sezsahin-ngx-image-magnifier.mjs",
       "default": "./dist/fesm2022/sezsahin-ngx-image-magnifier.mjs"
+    },
+    "./package.json": {
+      "default": "./package.json"
     }
   },
   "files": [

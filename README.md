@@ -65,10 +65,22 @@ export class GalleryComponent {}
 
 ## Usage Examples
 
-### Basic Magnification (Hover to Magnify)
+### Basic Magnification (Hover to View)
 
 ```html
 <img appImageMagnifier src="product.jpg" alt="Product" [magnifierSize]="300" />
+```
+
+By default, the magnifier shows the image at actual size. To enable zoom:
+
+```html
+<img
+  appImageMagnifier
+  src="product.jpg"
+  alt="Product"
+  [magnifierSize]="300"
+  [zoom]="2"
+/>
 ```
 
 ### With Keyboard Modifier
@@ -152,24 +164,55 @@ Mobile users can view the magnifier without holding the modifier.
 />
 ```
 
+### Zoom with Focus Control
+
+```html
+<!-- Zoom follows cursor -->
+<img appImageMagnifier src="map.jpg" alt="Map" [zoom]="3" zoomFocus="cursor" />
+
+<!-- Zoom with custom focus point -->
+<img
+  appImageMagnifier
+  src="product.jpg"
+  alt="Product"
+  [zoom]="2.5"
+  zoomFocus="custom"
+  [zoomFocusX]="75"
+  [zoomFocusY]="25"
+/>
+
+<!-- Zoom focused on top-right corner -->
+<img
+  appImageMagnifier
+  src="detail.jpg"
+  alt="Detail"
+  [zoom]="2"
+  zoomFocus="top-right"
+/>
+```
+
 ## API Reference
 
 ### @Input Properties
 
-| Property               | Type                                                                                                                       | Default  | Description                                                                            |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
-| `magnifierSize`        | `number`                                                                                                                   | `300`    | Width of magnifier window in pixels                                                    |
-| `magnifierSizeMobile`  | `number \| null`                                                                                                           | `null`   | Mobile-specific magnifier size (60% of desktop if not set)                             |
-| `magnifierRatio`       | `string \| null`                                                                                                           | `null`   | Aspect ratio as string, e.g., `'1/1'` or `'16/9'`. If null, uses image's natural ratio |
-| `magnifierRatioMobile` | `string \| null`                                                                                                           | `null`   | Mobile-specific aspect ratio                                                           |
-| `position`             | `'auto' \| 'right' \| 'left' \| 'top' \| 'bottom' \| 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'`         | `'auto'` | Positioning strategy for magnifier placement                                           |
-| `positionMobile`       | `'auto' \| 'right' \| 'left' \| 'top' \| 'bottom' \| 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left' \| null` | `null`   | Mobile-specific positioning (uses desktop position if null)                            |
-| `animateTransition`    | `boolean`                                                                                                                  | `true`   | Enable smooth 320ms transitions when moving magnifier                                  |
-| `rounded`              | `boolean`                                                                                                                  | `false`  | Apply circular border-radius (50%) to magnifier                                        |
-| `padding`              | `number \| null`                                                                                                           | `null`   | Padding from screen edges. Auto-calculated (5% of size + 20px min) if null             |
-| `requireKeyModifier`   | `'shift' \| 'ctrl' \| 'alt' \| null`                                                                                       | `null`   | Require holding modifier key to display magnifier. Ignored on mobile                   |
-| `showHint`             | `boolean`                                                                                                                  | `true`   | Show tooltip hint on first hover (only when modifier required)                         |
-| `hintText`             | `string \| null`                                                                                                           | `null`   | Custom hint text. Auto-generated based on modifier if null                             |
+| Property               | Type                                                                                                                                         | Default    | Description                                                                                        |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| `magnifierSize`        | `number`                                                                                                                                     | `300`      | Width of magnifier window in pixels                                                                |
+| `magnifierSizeMobile`  | `number \| null`                                                                                                                             | `null`     | Mobile-specific magnifier size (60% of desktop if not set)                                         |
+| `magnifierRatio`       | `string \| null`                                                                                                                             | `null`     | Aspect ratio as string, e.g., `'1/1'` or `'16/9'`. If null, uses image's natural ratio             |
+| `magnifierRatioMobile` | `string \| null`                                                                                                                             | `null`     | Mobile-specific aspect ratio                                                                       |
+| `position`             | `'auto' \| 'right' \| 'left' \| 'top' \| 'bottom' \| 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'`                           | `'auto'`   | Positioning strategy for magnifier placement                                                       |
+| `positionMobile`       | `'auto' \| 'right' \| 'left' \| 'top' \| 'bottom' \| 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left' \| null`                   | `null`     | Mobile-specific positioning (uses desktop position if null)                                        |
+| `animateTransition`    | `boolean`                                                                                                                                    | `true`     | Enable smooth 320ms transitions when moving magnifier                                              |
+| `rounded`              | `boolean`                                                                                                                                    | `false`    | Apply circular border-radius (50%) to magnifier                                                    |
+| `padding`              | `number \| null`                                                                                                                             | `null`     | Padding from screen edges. Auto-calculated (5% of size + 20px min) if null                         |
+| `requireKeyModifier`   | `'shift' \| 'ctrl' \| 'alt' \| null`                                                                                                         | `null`     | Require holding modifier key to display magnifier. Ignored on mobile                               |
+| `showHint`             | `boolean`                                                                                                                                    | `true`     | Show tooltip hint on first hover (only when modifier required)                                     |
+| `hintText`             | `string \| null`                                                                                                                             | `null`     | Custom hint text. Auto-generated based on modifier if null                                         |
+| `zoom`                 | `number \| null`                                                                                                                             | `null`     | Zoom factor for magnification (e.g., `2` for 2x zoom). `null` shows image at actual size           |
+| `zoomFocus`            | `'center' \| 'cursor' \| 'top-left' \| 'top' \| 'top-right' \| 'left' \| 'right' \| 'bottom-left' \| 'bottom' \| 'bottom-right' \| 'custom'` | `'center'` | Focus point for zoom. `'cursor'` follows mouse, `'center'` centers image, or use specific position |
+| `zoomFocusX`           | `number \| null`                                                                                                                             | `null`     | Custom X focus percentage (0-100) when `zoomFocus='custom'`                                        |
+| `zoomFocusY`           | `number \| null`                                                                                                                             | `null`     | Custom Y focus percentage (0-100) when `zoomFocus='custom'`                                        |
 
 ## Positioning Strategies
 
@@ -222,11 +265,25 @@ MIT License - see LICENSE file for details
 
 ## Changelog
 
+### 2.0.4 (February 05, 2026)
+
+**Changed**
+
+- Changed default zoom from `2` to `null` (no zoom by default)
+- Images now display at actual size unless zoom property is explicitly set
+- More dynamic and controllable zoom behavior
+
+### 2.0.3 (February 05, 2026)
+
+**Changed**
+
+- Updated docs.
+
 ### 2.0.2 (February 05, 2026)
 
 **Changed**
 
-- Updated GitHyb repository URL in package.json to the correct link.
+- Updated GitHub repository URL in package.json to the correct link.
 - Updated homepage URL in package.json to the correct link.
 
 ### 2.0.1 (January 28, 2026)

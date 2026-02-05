@@ -17,7 +17,10 @@ export class ImageMagnifierDirective implements OnInit, OnDestroy {
     @Input() requireKeyModifier: 'shift' | 'ctrl' | 'alt' | null = null; // require holding a keyboard modifier to show magnifier (null = no modifier required)
     @Input() showHint = true; // enable/disable hint tooltip on first hover (defaults to true)
     @Input() hintText: string | null = null; // custom hint text (overrides auto-generated hint)
-    @Input() zoom: number | null = 2; // zoom factor for magnifier
+    @Input() zoom: number | null = null; // zoom factor for magnifier (null = no zoom unless set)
+    @Input() zoomFocus: 'center' | 'cursor' | 'top-left' | 'top' | 'top-right' | 'left' | 'right' | 'bottom-left' | 'bottom' | 'bottom-right' | 'custom' = 'center';
+    @Input() zoomFocusX: number | null = null; // custom focus X percentage (0-100)
+    @Input() zoomFocusY: number | null = null; // custom focus Y percentage (0-100)
 
     private duplicate: HTMLElement | null = null;
     private hint: HTMLElement | null = null;
@@ -136,6 +139,7 @@ export class ImageMagnifierDirective implements OnInit, OnDestroy {
         this.duplicate.style.willChange = 'transform';
         this.duplicate.style.contain = 'layout paint';
         document.body.appendChild(this.duplicate);
+        this.updateBackgroundPosition(this.lastMouseEvent ?? undefined);
     }
 
     ngOnInit() {
@@ -209,8 +213,76 @@ export class ImageMagnifierDirective implements OnInit, OnDestroy {
             this.pendingPositionUpdate = true;
             requestAnimationFrame(() => {
                 this.positionDuplicate(event);
+                if (this.zoomFocus === 'cursor') {
+                    this.updateBackgroundPosition(event);
+                }
                 this.pendingPositionUpdate = false;
             });
+        }
+    }
+
+    private updateBackgroundPosition(event?: MouseEvent) {
+        if (!this.duplicate) return;
+
+        const img = this.elementRef.nativeElement as HTMLImageElement;
+        const imgRect = img.getBoundingClientRect();
+
+        const focus = this.getFocusPercent(event, imgRect);
+        const hasRatio =
+            (this.isMobile && this.magnifierRatioMobile && this.magnifierRatioMobile.trim() !== '') ||
+            (this.magnifierRatio && this.magnifierRatio.trim() !== '');
+
+        if (hasRatio || !(typeof this.zoom === 'number' && this.zoom > 0)) {
+            this.duplicate.style.backgroundPosition = `${focus.x}% ${focus.y}%`;
+            return;
+        }
+
+        const duplicateWidth = parseInt(this.duplicate.style.width, 10);
+        const duplicateHeight = parseInt(this.duplicate.style.height, 10);
+        const bgWidth = img.naturalWidth * this.zoom;
+        const bgHeight = img.naturalHeight * this.zoom;
+
+        const bgX = -(bgWidth * (focus.x / 100) - duplicateWidth / 2);
+        const bgY = -(bgHeight * (focus.y / 100) - duplicateHeight / 2);
+
+        this.duplicate.style.backgroundPosition = `${bgX}px ${bgY}px`;
+    }
+
+    private getFocusPercent(event: MouseEvent | undefined, imgRect: DOMRect): { x: number; y: number } {
+        const clamp = (value: number) => Math.max(0, Math.min(100, value));
+
+        if (this.zoomFocus === 'cursor' && event) {
+            const x = ((event.clientX - imgRect.left) / imgRect.width) * 100;
+            const y = ((event.clientY - imgRect.top) / imgRect.height) * 100;
+            return { x: clamp(x), y: clamp(y) };
+        }
+
+        if (this.zoomFocus === 'custom') {
+            const x = this.zoomFocusX ?? 50;
+            const y = this.zoomFocusY ?? 50;
+            return { x: clamp(x), y: clamp(y) };
+        }
+
+        switch (this.zoomFocus) {
+            case 'top-left':
+                return { x: 0, y: 0 };
+            case 'top':
+                return { x: 50, y: 0 };
+            case 'top-right':
+                return { x: 100, y: 0 };
+            case 'left':
+                return { x: 0, y: 50 };
+            case 'right':
+                return { x: 100, y: 50 };
+            case 'bottom-left':
+                return { x: 0, y: 100 };
+            case 'bottom':
+                return { x: 50, y: 100 };
+            case 'bottom-right':
+                return { x: 100, y: 100 };
+            case 'center':
+            default:
+                return { x: 50, y: 50 };
         }
     }
 

@@ -43,7 +43,7 @@ A highly performant, customizable Angular image magnifier directive with keyboar
 ## Installation
 
 ```bash
-npm install ngx-image-magnifier
+npm install @sezsahin/ngx-image-magnifier
 ```
 
 ## Quick Start
@@ -52,7 +52,7 @@ Import the directive and apply it to any image:
 
 ```typescript
 import { Component } from "@angular/core";
-import { ImageMagnifierDirective } from "ngx-image-magnifier";
+import { ImageMagnifierDirective } from "@sezsahin/ngx-image-magnifier";
 
 @Component({
   selector: "app-gallery",
@@ -264,6 +264,21 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 MIT License - see LICENSE file for details
 
 ## Changelog
+
+### 2.0.6 (February 05, 2026)
+
+### Fixed
+
+- Aligned package entry points/exports to the actual ng-packagr output paths so module resolution works correctly.
+
+### 2.0.5 (February 05, 2026)
+
+**Fixed**
+
+- Fixed npm installation issues in Angular packages
+  - Added missing build scripts (`build` and `build:watch`) to package.json
+  - Generated proper dist folder with compiled modules, type definitions, and manifests
+  - Ensured library exports are correctly configured for npm distribution
 
 ### 2.0.4 (February 05, 2026)
 
